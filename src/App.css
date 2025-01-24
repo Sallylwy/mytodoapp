@@ -1,0 +1,216 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #4769ff;
+  color: white;
+  width: 100%;
+}
+
+.todo-card {
+  background: white;
+  color: black;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0.2, 0.3);
+  width: 400px; /* Fixed width for consistency */
+  max-width: 65%; /* Ensures it adapts to smaller screens */
+  text-align: center;
+}
+
+.todo-card h1 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  line-height: 1.25;
+}
+
+.input-container {
+  display: flex;
+  margin: 20px 0;
+}
+
+.input-container input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  flex: 1; /* Allows the input to take up remaining space */
+  font-size: 16px;
+}
+
+.input-container input:focus {
+  border-color: #4769ff; /* Add a focus colour for when the user clicks inside the box */
+  outline: none; 
+}
+
+.input-container button {
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+  margin-left: 10px;
+  background-color: #4769ff;
+  color: white;
+  cursor: pointer;
+}
+
+/* Task list styles */
+.todo-list {
+  margin-top: 20px;
+}
+
+.task-item {
+  display: flex;
+  flex-direction: column; /* Stack header and description vertically */
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.task-item.completed span {
+  text-decoration: line-through;
+  color: grey;
+  opacity: 0.7;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between; /* Keeps checkbox, text, and buttons spaced */
+  align-items: center; /* Aligns all items vertically in the center */
+}
+
+.task-header input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.task-header span {
+  flex: 1; /* Take up available space */
+  text-align: left;
+  cursor: pointer;
+  word-wrap: break-word; /* Break text if it’s too long */
+  overflow-wrap: break-word; /* Additional safety for breaking long words */
+  white-space: normal; /* Allow text to wrap */
+  max-width: 90%; /* Ensure the span doesn't stretch too wide */
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.task-actions button {
+  background: transparent;
+  border: none;
+  color: #4769ff;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 5px; /* Small spacing between buttons */
+  opacity: 0; /* Hide buttons by default */
+  transition: opacity 0.2s ease; /* Smooth transition for better UX */
+}
+
+.task-item:hover .task-actions button {
+  opacity: 1; /* Show buttons when hovering over the task item */
+}
+
+.task-actions button:focus {
+  outline: none;
+}
+
+.task-description {
+  margin-top: 10px;
+  width: 90%; /* Ensure textarea spans full width */
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  resize: none; /* Prevent resizing */
+  font-family: Arial;
+}
+
+.task-description:focus {
+  outline: none;
+}
+
+.status-count {
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px; /* Spacing below the count */
+  color: #4769ff; /* Match the button colour for a cohesive look */
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #4769ff;
+}
+
+.footer button {
+  background: none;
+  border: 1px solid transparent; /* Default: no visible border */
+  cursor: pointer;
+  font-size: 14px;
+  color: #4769ff;
+  padding: 5px 10px;
+  border-radius: 3px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hover state for footer buttons */
+.footer button:hover {
+  border: 1px solid #4769ff; /* Blue border on hover */
+}
+
+.footer button:focus {
+  border-color: #4769ff; /* Add a focus colour for when the user clicks inside the box */
+  outline: none; 
+}
+
+/* Filter buttons (e.g., All, Active, Completed) */
+.filters button {
+  background: none;
+  border: 1px solid transparent; /* Default: no visible border */
+  cursor: pointer;
+  font-size: 14px;
+  color: #4769ff; /* Button text color */
+  padding: 5px 10px;
+  border-radius: 3px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hover state for filter buttons */
+.filters button:hover {
+  border: 1px solid #4769ff; /* 1px border for hover */
+}
+
+.filters button:focus {
+  border-color: #4769ff; /* Add a focus colour for when the user clicks inside the box */
+  outline: none; 
+}
+
+.task-details {
+  margin-top: 10px;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+textarea {
+  resize: none; /* Prevent resizing */
+}
