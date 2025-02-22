@@ -55,7 +55,7 @@ const App = () => {
           {/* Logo */}
           <a className="navbar-brand" href="#">
             <img 
-              src="/src/assets/ideaspark.svg" 
+              src="./src/assets/ideaspark.svg" 
               alt="Logo" 
               className="nav-logo"
             />
