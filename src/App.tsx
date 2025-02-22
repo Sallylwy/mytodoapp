@@ -5,6 +5,7 @@ import { getTasks, addTask as apiAddTask } from "./services/api";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import logo from './assets/ideaspark.svg';
 
 type Task = {
   id: string;
@@ -55,7 +56,7 @@ const App = () => {
           {/* Logo */}
           <a className="navbar-brand" href="#">
             <img 
-              src="./src/assets/ideaspark.svg" 
+              src={logo} 
               alt="Logo" 
               className="nav-logo"
             />
