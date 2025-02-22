@@ -6,7 +6,7 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "build": "react-scripts build && cp -r public/assets build/assets",
+    "build": "react-scripts build",
     "preview": "vite preview"
   },
   "dependencies": {
