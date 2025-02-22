@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 // Define Task type
 type Task = {
-  id: number;
+  id: string;
   text: string;
   completed: boolean;
   description: string;
@@ -11,10 +11,10 @@ type Task = {
 // Define TaskItemProps
 type TaskItemProps = {
   task: Task;
-  deleteTask: (id: number) => void;
-  toggleComplete: (id: number) => void;
-  editTask: (id: number, newText: string) => void;
-  editDescription: (id: number, newDescription: string) => void;
+  deleteTask: (id: string) => void;
+  toggleComplete: (id: string) => void;
+  editTask: (id: string, newText: string) => void;
+  editDescription: (id: string, newDescription: string) => void;
 };
 
 const TaskItem: React.FC<TaskItemProps> = ({
@@ -35,15 +35,27 @@ const TaskItem: React.FC<TaskItemProps> = ({
     }
   }, [task.completed]);
 
-  const handleSaveText = () => {
-    if (editText.trim()) {
-      editTask(task.id, editText);
-    }
-    setIsEditing(false);
-  };
+  useEffect(() => {
+    setEditText(task.text);
+    setDescription(task.description);
+  }, [task.text, task.description]);
 
+  const handleSaveText = async () => {
+    if (editText.trim() && editText !== task.text) {
+      editTask(task.id, editText);
+      setIsEditing(false);
+    } else if (!editText.trim()) {
+      // If empty, revert to original text
+      setEditText(task.text);
+      setIsEditing(false);
+    } else {
+      // If no changes, just exit edit mode
+      setIsEditing(false);
+    }
+  };
+  
   const handleSaveDescription = () => {
-    if (description.trim()) {
+    if (description.trim() !== task.description) {
       editDescription(task.id, description);
     }
     setIsExpanded(false); // Collapse after saving
@@ -65,16 +77,24 @@ const TaskItem: React.FC<TaskItemProps> = ({
     }
   };
 
+  const handleTextClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!isEditing) {
+      setIsEditing(true);
+    }
+  };
+
   return (
     <div className={`task-item ${task.completed ? "completed" : ""}`}>
-      <div className="task-header" onClick={toggleExpand}>
+      <div className="task-header">
         <input
           type="checkbox"
           checked={task.completed}
           onChange={(e) => {
-            e.stopPropagation(); // Prevent toggleExpand when checkbox is clicked
+            e.stopPropagation();
             toggleComplete(task.id);
           }}
+          className="task-checkbox"
         />
         {isEditing ? (
           <input
@@ -83,47 +103,85 @@ const TaskItem: React.FC<TaskItemProps> = ({
             onChange={(e) => setEditText(e.target.value)}
             onBlur={handleSaveText}
             onKeyDown={(e) => handleKeyDown(e, handleSaveText)}
+            onClick={(e) => e.stopPropagation()}
             autoFocus
+            style={{ flex: 1 }}
           />
         ) : (
           <span
-            onDoubleClick={(e) => {
-              e.stopPropagation(); // Prevent toggleExpand on double-click
-              setIsEditing(true);
-            }}
-            style={{ cursor: "pointer" }}
+            onClick={handleTextClick}
+            style={{ cursor: "pointer", flex: 1 }}
           >
             {task.text}
           </span>
         )}
-        <div
-          className="task-actions"
-          onClick={(e) => e.stopPropagation()} // Prevent expand toggle when clicking buttons
-        >
+        <div className="task-actions">
+          {/* Description toggle button with tooltip */}
           <button
-  onClick={(e) => {
-    e.stopPropagation();
-    setIsEditing(true); // Enable editing mode
-  }}
-  style={{ background: "transparent", border: "none", cursor: "pointer" }} // Optional inline styles for styling
->
-  <i className="bi bi-pencil-fill" style={{ color: "#4769ff", fontSize: "16px" }}></i>
-</button>
-          <button onClick={() => deleteTask(task.id)}>
-          <i className="bi bi-x" style={{ color: '#4769ff' }}></i>
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsExpanded(!isExpanded);
+            }}
+            style={{ 
+              background: "transparent", 
+              border: "none", 
+              cursor: "pointer",
+              padding: "4px"
+            }}
+            title="Add notes"
+          >
+            <i className={`bi bi-chat-square-text${isExpanded ? '-fill' : ''}`} style={{ color: "#4769ff", fontSize: "16px" }}></i>
+          </button>
+          {/* Delete button */}
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              deleteTask(task.id);
+            }}
+            style={{ 
+              background: "transparent", 
+              border: "none", 
+              cursor: "pointer",
+              padding: "4px"
+            }}
+          >
+            <i className="bi bi-x" style={{ color: '#4769ff' }}></i>
           </button>
         </div>
       </div>
+      
+      {/* Description section */}
       {isExpanded && !task.completed && (
-        <textarea
-          className="task-description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          onBlur={handleSaveDescription}
-          onKeyDown={(e) => handleKeyDown(e, handleSaveDescription)}
-          placeholder="Add description or goals..."
-          autoFocus
-        />
+        <div className="description-container" style={{ marginTop: '8px' }}>
+          <textarea
+            className="task-description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            onKeyDown={(e) => handleKeyDown(e, handleSaveDescription)}
+            placeholder="Add description or goals..."
+            style={{
+              width: '100%',
+              minHeight: '60px',
+              padding: '8px',
+              marginBottom: '8px',
+              borderRadius: '4px',
+              border: '1px solid #ddd'
+            }}
+          />
+          <button
+            onClick={handleSaveDescription}
+            style={{
+              background: '#4769ff',
+              color: 'white',
+              border: 'none',
+              padding: '4px 12px',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            Save
+          </button>
+        </div>
       )}
     </div>
   );

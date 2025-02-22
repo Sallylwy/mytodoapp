@@ -1,28 +1,96 @@
-body {
+/* Root styles */
+body, html {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+  background-color: #4769ff;
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
+#root {
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #4769ff;
+}
+
+/* New navbar styles */
+.navbar {
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 60px;
+  background: white;
+}
+
+.navbar-brand img {
+  margin-right: 10px;
+}
+
+/* Logo styles */
+.nav-logo {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Menu button styles */
+.menu-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: #4769ff;
+  transition: all 0.3s ease;
+  width: 100px;
+  text-align: center;
+}
+
+.menu-button:hover {
+  background-color: #4769ff;
+  color: white;
+}
+
+/* Dropdown menu styles */
+.custom-dropdown {
+  border: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 8px;
+  min-width: 200px;
+}
+
+.custom-dropdown .dropdown-item {
+  padding: 8px 16px;
+  color: #4769ff;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  margin: 2px 8px;
+  width: calc(100% - 16px); /* This ensures the item doesn't stretch to the edges */
+}
+
+.custom-dropdown .dropdown-item:hover {
+  background-color: #4769ff;
+  color: white;
+  font-weight: 600;
+}
+
+/* Adjust app container to account for navbar */
 .app {
+  min-height: calc(100vh - 60px);
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: #4769ff;
-  color: white;
-  width: 100%;
+  padding: 20px;
+  background-color: #4769ff;
 }
 
 .todo-card {
   background: white;
-  color: black;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0.2, 0.3);
-  width: 400px; /* Fixed width for consistency */
-  max-width: 65%; /* Ensures it adapts to smaller screens */
-  text-align: center;
+  border-radius: 20px;
+  padding: 32px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .todo-card h1 {
@@ -33,14 +101,15 @@ body {
 
 .input-container {
   display: flex;
+  gap: 10px;
   margin: 20px 0;
 }
 
 .input-container input {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  flex: 1; /* Allows the input to take up remaining space */
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   font-size: 16px;
 }
 
@@ -50,13 +119,13 @@ body {
 }
 
 .input-container button {
-  padding: 10px;
-  border-radius: 5px;
-  outline: none;
-  margin-left: 10px;
-  background-color: #4769ff;
+  padding: 12px 24px;
+  background: #4769ff;
   color: white;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 20px;
 }
 
 /* Task list styles */
@@ -75,6 +144,7 @@ body {
   max-width: 100%;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  width: 100%;
 }
 
 .task-item.completed span {
@@ -85,8 +155,10 @@ body {
 
 .task-header {
   display: flex;
-  justify-content: space-between; /* Keeps checkbox, text, and buttons spaced */
-  align-items: center; /* Aligns all items vertically in the center */
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px;
 }
 
 .task-header input[type="checkbox"] {
@@ -97,7 +169,7 @@ body {
   flex: 1; /* Take up available space */
   text-align: left;
   cursor: pointer;
-  word-wrap: break-word; /* Break text if it’s too long */
+  word-wrap: break-word; /* Break text if it's too long */
   overflow-wrap: break-word; /* Additional safety for breaking long words */
   white-space: normal; /* Allow text to wrap */
   max-width: 90%; /* Ensure the span doesn't stretch too wide */
@@ -105,8 +177,8 @@ body {
 
 .task-actions {
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  gap: 4px;
+  margin-left: auto; /* This pushes the actions to the right */
 }
 
 .task-actions button {
@@ -137,6 +209,7 @@ body {
   font-size: 14px;
   resize: none; /* Prevent resizing */
   font-family: Arial;
+  resize: vertical;
 }
 
 .task-description:focus {
@@ -144,11 +217,9 @@ body {
 }
 
 .status-count {
-  text-align: left;
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 10px; /* Spacing below the count */
-  color: #4769ff; /* Match the button colour for a cohesive look */
+  color: #4769ff;
+  font-size: 18px;
+  margin-bottom: 16px;
 }
 
 .footer {
@@ -213,4 +284,108 @@ body {
 
 textarea {
   resize: none; /* Prevent resizing */
+}
+
+.description-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 8px;
+}
+
+.task-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+h1 {
+  font-size: 24px;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+/* Tablet responsiveness */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .navbar {
+    padding: 0.5rem 2rem;  /* Increased horizontal padding */
+    height: 70px;         /* Slightly taller navbar for tablets */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-logo {
+    height: 45px;  /* Larger logo for tablet view */
+  }
+
+  .menu-button {
+    padding: 8px 16px;
+    width: 100px;    /* Wider button for tablet */
+    font-size: 16px; /* Larger font size */
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 767px) {
+  .navbar {
+    padding: 0.2rem;
+  }
+
+  .nav-logo {
+    height: 50px;
+  }
+
+  .menu-button {
+    padding: 6px 12px;
+    width: auto;
+    min-width: 80px;
+  }
+
+  .todo-card {
+    padding: 20px;
+    width: 95%;
+    margin: 10px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .app {
+    padding: 10px;
+  }
+
+  .custom-dropdown {
+    min-width: 160px;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 375px) {
+  .navbar {
+    padding: 0.5rem;
+    height: 55px;  /* Slightly reduced height */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-logo {
+    height: 100px;  /* Further reduced for very small screens */
+  }
+
+  .menu-button {
+    padding: 4px 8px;
+    width: 70px;  /* Slightly smaller for very small screens */
+  }
+
+  .todo-card {
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 1.25rem;
+  }
 }
