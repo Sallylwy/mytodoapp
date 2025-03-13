@@ -13,10 +13,10 @@ const app = express();
 // Middleware
 app.use(express.json()); // Allows Express to parse JSON requests
 app.use(cors({
-  origin: 'https://my-ideaspark.netlify.app',  // Single origin
-  credentials: true,
+  origin: 'https://my-ideaspark.netlify.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type'],
+  credentials: false
 }));
 
 // Add OPTIONS handling
@@ -41,25 +41,18 @@ const PORT = process.env.PORT || 5001;
 app.use("/api/tasks", taskRoutes);
 app.post("/api/tasks", async (req, res) => {
   try {
-    console.log('Received task:', req.body);
-    
+    console.log('Received task request:', req.body);
     const task = new Task({
       text: req.body.text,
       completed: false,
       description: ""
     });
-    
-    console.log('Created task object:', task);
     const savedTask = await task.save();
     console.log('Saved task:', savedTask);
-    
     res.json(savedTask);
   } catch (error) {
     console.error('Error saving task:', error);
-    res.status(500).json({ 
-      message: error.message,
-      stack: error.stack 
-    });
+    res.status(500).json({ message: error.message });
   }
 });
 
