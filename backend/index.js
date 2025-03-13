@@ -10,14 +10,22 @@ dotenv.config();
 
 const app = express();
 
+const allowedOrigins = ["https://my-ideaspark.netlify.app"];
+
 // Middleware
 app.use(express.json()); // Allows Express to parse JSON requests
-app.use(cors({
-  origin: 'https://my-ideaspark.netlify.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
-  credentials: false
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, origin);  // Allow specific origins only
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 // Add OPTIONS handling
 app.options('*', cors());  // Enable pre-flight for all routes
