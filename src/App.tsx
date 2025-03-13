@@ -18,52 +18,32 @@ const App = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskInput, setTaskInput] = useState<string>("");
 
-  // Add useEffect to fetch tasks when component mounts
+  // Load tasks when component mounts
   useEffect(() => {
-    fetchTasks();
+    const loadTasks = async () => {
+      const fetchedTasks = await getTasks();
+      console.log('Initial tasks loaded:', fetchedTasks);
+      setTasks(fetchedTasks);
+    };
+    loadTasks();
   }, []);
 
-  const fetchTasks = async () => {
-    const data = await getTasks();
-    if (data) {
-      setTasks(data.map(task => ({ ...task, id: task._id })));
-    }
-  };
-
-  const addTask = async () => {
+  const handleAddTask = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (taskInput.trim()) {
       try {
-        console.log('Attempting to add task:', taskInput);
-        const newTask = { 
-          text: taskInput, 
-          completed: false, 
-          description: "" 
-        };
-        
-        const savedTask = await apiAddTask(newTask);
-        console.log('Response from backend:', savedTask);
-        
-        if (savedTask) {
-          setTasks(prevTasks => [...prevTasks, savedTask]);
-          setTaskInput("");
-        }
+        console.log('Adding task:', taskInput);
+        const newTask = await apiAddTask({
+          text: taskInput,
+          completed: false,
+          description: ""
+        });
+        console.log('New task added:', newTask);
+        setTasks(prevTasks => [...prevTasks, newTask]);
+        setTaskInput("");
       } catch (error) {
-        console.error('Error in addTask:', error);
-        // Optionally show error to user
-        alert('Failed to add task. Please try again.');
+        console.error('Error adding task:', error);
       }
-    }
-  };
-
-  // Make sure your form prevents default submission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    addTask();
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      addTask();
     }
   };
 
@@ -107,13 +87,12 @@ const App = () => {
             <span>Completed: {completedCount}</span>
           </div>
           <h1>Hey Sal, what would you like to achieve today 🚀</h1>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleAddTask}>
             <div className="input-container">
               <input
                 type="text"
                 value={taskInput}
                 onChange={(e) => setTaskInput(e.target.value)}
-                onKeyDown={handleKeyDown}
                 placeholder="Enter a task..."
               />
               <button type="submit">Add</button>
