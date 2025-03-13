@@ -7,12 +7,12 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import logo from './assets/ideaspark.svg';
 
-type Task = {
-  id: string;
+interface Task {
+  _id: string;
   text: string;
   completed: boolean;
   description: string;
-};
+}
 
 const App = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -21,9 +21,14 @@ const App = () => {
   // Load tasks when component mounts
   useEffect(() => {
     const loadTasks = async () => {
-      const fetchedTasks = await getTasks();
-      console.log('Initial tasks loaded:', fetchedTasks);
-      setTasks(fetchedTasks);
+      try {
+        const fetchedTasks = await getTasks();
+        console.log('Loaded tasks:', fetchedTasks);
+        setTasks(fetchedTasks || []); // Ensure we always set an array
+      } catch (error) {
+        console.error('Error loading tasks:', error);
+        setTasks([]); // Set empty array on error
+      }
     };
     loadTasks();
   }, []);
@@ -32,14 +37,21 @@ const App = () => {
     e.preventDefault();
     if (taskInput.trim()) {
       try {
-        console.log('Adding task:', taskInput);
         const newTask = await apiAddTask({
           text: taskInput,
           completed: false,
           description: ""
         });
-        console.log('New task added:', newTask);
-        setTasks(prevTasks => [...prevTasks, newTask]);
+        console.log('New task created:', newTask);
+        
+        // Properly update tasks array
+        setTasks(currentTasks => {
+          console.log('Current tasks:', currentTasks);
+          const updatedTasks = [...currentTasks, newTask];
+          console.log('Updated tasks:', updatedTasks);
+          return updatedTasks;
+        });
+        
         setTaskInput("");
       } catch (error) {
         console.error('Error adding task:', error);
