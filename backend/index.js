@@ -11,7 +11,11 @@ const app = express();
 
 // Middleware
 app.use(express.json()); // Allows Express to parse JSON requests
-app.use(cors()); // Enables frontend communication
+app.use(cors({
+  origin: ['https://my-ideaspark.netlify.app', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+})); // Enables frontend communication
 
 // Connect to MongoDB
 mongoose
@@ -26,5 +30,5 @@ app.get("/", (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 5001;
-app.use("/api", taskRoutes);
+app.use("/api/tasks", taskRoutes);
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

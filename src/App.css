@@ -51,11 +51,18 @@ body, html {
 }
 
 /* Dropdown menu styles */
+.dropdown {
+  position: relative;
+}
+
 .custom-dropdown {
   border: none;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   padding: 8px;
   min-width: 200px;
+  right: 0;  /* Add this to align to the right */
+  left: auto !important;  /* Override Bootstrap's left positioning */
+  transform-origin: top right;  /* Adjust transform origin */
 }
 
 .custom-dropdown .dropdown-item {

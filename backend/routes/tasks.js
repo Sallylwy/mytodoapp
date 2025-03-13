@@ -1,5 +1,5 @@
 import express from "express";
-import Task from "../models/task.js"; // Ensure .js extension
+import Task from "../models/task.mjs"
 
 const router = express.Router();
 

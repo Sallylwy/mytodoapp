@@ -73,7 +73,7 @@ const App = () => {
             >
               Menu
             </button>
-            <ul className="dropdown-menu dropdown-menu-end custom-dropdown" aria-labelledby="dropdownMenuButton">
+            <ul className="dropdown-menu custom-dropdown" aria-labelledby="dropdownMenuButton">
               <li><a className="dropdown-item" href="#">To-do List</a></li>
               <li><a className="dropdown-item" href="#">Idea Backlog</a></li>
             </ul>
