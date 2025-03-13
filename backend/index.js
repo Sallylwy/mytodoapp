@@ -65,4 +65,15 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "API is working!" });
 });
 
+app.get("/api/tasks", async (req, res) => {
+  try {
+    const tasks = await Task.find({});
+    console.log('Sending tasks:', tasks);
+    res.json(tasks);
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
