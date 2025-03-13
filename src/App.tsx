@@ -32,8 +32,11 @@ const App = () => {
 
   const addTask = async () => {
     if (taskInput.trim()) {
+      console.log('Attempting to add task:', taskInput);
       const newTask = { text: taskInput, completed: false, description: "" };
+      console.log('Task object:', newTask);
       const savedTask = await apiAddTask(newTask); // Save to backend
+      console.log('Response from backend:', savedTask);
       if (savedTask) {
         setTasks([...tasks, savedTask]); // Update UI with saved task
         setTaskInput(""); // Clear input field

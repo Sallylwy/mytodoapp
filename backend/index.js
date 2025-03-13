@@ -31,4 +31,24 @@ app.get("/", (req, res) => {
 // Start server
 const PORT = process.env.PORT || 5001;
 app.use("/api/tasks", taskRoutes);
+app.post("/api/tasks", async (req, res) => {
+  try {
+    console.log('Received task request:', req.body);
+    const task = new Task({
+      text: req.body.text,
+      completed: false,
+      description: ""
+    });
+    console.log('Created task object:', task);
+    const savedTask = await task.save();
+    console.log('Saved task:', savedTask);
+    res.json(savedTask);
+  } catch (error) {
+    console.error('Error saving task:', error);
+    res.status(500).json({ 
+      message: error.message,
+      stack: error.stack 
+    });
+  }
+});
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

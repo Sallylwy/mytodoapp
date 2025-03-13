@@ -17,10 +17,13 @@ export const getTasks = async () => {
 // Function to add a new task
 export const addTask = async (task: { text: string; completed: boolean; description: string }) => {
   try {
+    console.log('Sending task:', task);
+    console.log('To URL:', `${API_BASE_URL}/tasks`);
     const response = await axios.post(`${API_BASE_URL}/tasks`, task);
+    console.log('Response:', response.data);
     return response.data;
   } catch (error) {
-    console.error("Error adding task", error);
+    console.error("Error adding task:", error);
     return null;
   }
 };
