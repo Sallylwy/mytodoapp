@@ -17,21 +17,25 @@ interface Task {
 const App = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskInput, setTaskInput] = useState<string>("");
+  const [error, setError] = useState("");
 
   // Load tasks when component mounts
   useEffect(() => {
     const loadTasks = async () => {
       try {
+        console.log('Loading initial tasks...');
         const fetchedTasks = await getTasks();
         console.log('Loaded tasks:', fetchedTasks);
-        setTasks(fetchedTasks || []); // Ensure we always set an array
-      } catch (error) {
-        console.error('Error loading tasks:', error);
-        setTasks([]); // Set empty array on error
+        setTasks(fetchedTasks);
+        setError("");
+      } catch (err) {
+        console.error('Failed to load tasks:', err);
+        setError("Failed to load tasks");
+        setTasks([]); // Ensure we have an empty array
       }
     };
     loadTasks();
-  }, []);
+  }, []); // Empty dependency array means this runs once on mount
 
   const handleAddTask = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,19 +46,15 @@ const App = () => {
           completed: false,
           description: ""
         });
-        console.log('New task created:', newTask);
-        
-        // Properly update tasks array
-        setTasks(currentTasks => {
-          console.log('Current tasks:', currentTasks);
-          const updatedTasks = [...currentTasks, newTask];
-          console.log('Updated tasks:', updatedTasks);
-          return updatedTasks;
-        });
-        
+        console.log('Task added successfully:', newTask);
+        // Reload all tasks instead of just appending
+        const updatedTasks = await getTasks();
+        setTasks(updatedTasks);
         setTaskInput("");
-      } catch (error) {
-        console.error('Error adding task:', error);
+        setError("");
+      } catch (err) {
+        console.error('Failed to add task:', err);
+        setError("Failed to add task");
       }
     }
   };
@@ -99,6 +99,7 @@ const App = () => {
             <span>Completed: {completedCount}</span>
           </div>
           <h1>Hey Sal, what would you like to achieve today 🚀</h1>
+          {error && <div style={{color: 'red'}}>{error}</div>}
           <form onSubmit={handleAddTask}>
             <div className="input-container">
               <input
