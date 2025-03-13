@@ -32,16 +32,33 @@ const App = () => {
 
   const addTask = async () => {
     if (taskInput.trim()) {
-      console.log('Attempting to add task:', taskInput);
-      const newTask = { text: taskInput, completed: false, description: "" };
-      console.log('Task object:', newTask);
-      const savedTask = await apiAddTask(newTask); // Save to backend
-      console.log('Response from backend:', savedTask);
-      if (savedTask) {
-        setTasks([...tasks, savedTask]); // Update UI with saved task
-        setTaskInput(""); // Clear input field
+      try {
+        console.log('Attempting to add task:', taskInput);
+        const newTask = { 
+          text: taskInput, 
+          completed: false, 
+          description: "" 
+        };
+        
+        const savedTask = await apiAddTask(newTask);
+        console.log('Response from backend:', savedTask);
+        
+        if (savedTask) {
+          setTasks(prevTasks => [...prevTasks, savedTask]);
+          setTaskInput("");
+        }
+      } catch (error) {
+        console.error('Error in addTask:', error);
+        // Optionally show error to user
+        alert('Failed to add task. Please try again.');
       }
     }
+  };
+
+  // Make sure your form prevents default submission
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    addTask();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -90,16 +107,18 @@ const App = () => {
             <span>Completed: {completedCount}</span>
           </div>
           <h1>Hey Sal, what would you like to achieve today 🚀</h1>
-          <div className="input-container">
-            <input
-              type="text"
-              value={taskInput}
-              onChange={(e) => setTaskInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Write them here!"
-            />
-            <button onClick={addTask}>+</button>
-          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="input-container">
+              <input
+                type="text"
+                value={taskInput}
+                onChange={(e) => setTaskInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Enter a task..."
+              />
+              <button type="submit">Add</button>
+            </div>
+          </form>
           <ToDoList tasks={tasks} setTasks={setTasks} />
         </div>
       </div>
