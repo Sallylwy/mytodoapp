@@ -13,11 +13,14 @@ const app = express();
 // Middleware
 app.use(express.json()); // Allows Express to parse JSON requests
 app.use(cors({
-  origin: 'https://my-ideaspark.netlify.app',  // Specific origin instead of array
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  origin: 'https://my-ideaspark.netlify.app',  // Single origin
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-})); // Enables frontend communication
+}));
+
+// Add OPTIONS handling
+app.options('*', cors());  // Enable pre-flight for all routes
 
 // Connect to MongoDB
 mongoose
